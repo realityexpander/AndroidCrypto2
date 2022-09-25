@@ -30,11 +30,11 @@ class UserSettingsSerializer(
         }
     }
 
-    override suspend fun writeTo(t: UserSettings, output: OutputStream) {
+    override suspend fun writeTo(userSettings: UserSettings, output: OutputStream) {
         cryptoManager.encrypt(
             bytes = Json.encodeToString(
                 serializer = UserSettings.serializer(),
-                value = t
+                value = userSettings
             ).encodeToByteArray(),
             outputStream = output
         )

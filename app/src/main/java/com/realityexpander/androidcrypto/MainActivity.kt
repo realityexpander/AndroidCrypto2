@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
 
     private val Context.dataStore by dataStore(
+//    private val dataStore by dataStore(
         fileName = "user-settings.json",
         serializer = UserSettingsSerializer(CryptoManager())
     )

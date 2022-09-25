@@ -19,9 +19,10 @@ class CryptoManager {
         load(null)
     }
 
-    private val encryptCipher get() = Cipher.getInstance(TRANSFORMATION).apply {
-        init(Cipher.ENCRYPT_MODE, getKey())
-    }
+    private val encryptCipher
+        get() = Cipher.getInstance(TRANSFORMATION).apply {
+            init(Cipher.ENCRYPT_MODE, getKey())
+        }
 
     private fun getDecryptCipherForIv(iv: ByteArray): Cipher {
         return Cipher.getInstance(TRANSFORMATION).apply {
@@ -51,7 +52,20 @@ class CryptoManager {
     }
 
     fun encrypt(bytes: ByteArray, outputStream: OutputStream): ByteArray {
-        val encryptedBytes = encryptCipher.doFinal(bytes)
+        //val startPaddingForAES = byteArrayOf(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+        //val startPaddingForAES = byteArrayOf(127,127,127,127,127,127,127,127,127,127,127,127,127,127,127,127)
+        //val startPaddingForAES = byteArrayOf(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16)
+        //val startPaddingForAES = encryptCipher.iv
+
+//        var bytesToEncrypt = bytes.copyOf()
+//        if (bytes.size + startPaddingForAES.size < 112) {  // 112 + 16 = 128
+//            val additionalBytes = 112 - (bytes.size + startPaddingForAES.size)
+//            bytesToEncrypt += ByteArray(additionalBytes)
+//        }
+//        val encryptedBytes = encryptCipher.doFinal(startPaddingForAES + bytesToEncrypt)
+
+        val encryptedBytes = encryptCipher.doFinal(encryptCipher.iv + bytes)
+
         outputStream.use {
             it.write(encryptCipher.iv.size)
             it.write(encryptCipher.iv)
@@ -71,14 +85,37 @@ class CryptoManager {
             val encryptedBytes = ByteArray(encryptedBytesSize)
             it.read(encryptedBytes)
 
-            getDecryptCipherForIv(iv).doFinal(encryptedBytes)
+            val decipheredByteArray = getDecryptCipherForIv(iv)
+                .doFinal(encryptedBytes)
+//            val decipheredIvLength = 128 - decipheredByteArray.size
+
+
+            decipheredByteArray
+                .toList()
+                .subList(16, decipheredByteArray.size) // skip the IV
+                .toByteArray()
+                .decodeToString()
+                .substringBefore(Char(0)) // trim the trailing zero characters
+                .toByteArray()
+
+//            getDecryptCipherForIv(iv)
+//                .doFinal(encryptedBytes)
+//                .toList()
+//                .subList(16, encryptedBytes.size - 1) // skip the IV
+//                .toByteArray()
+//                .decodeToString()
+//                .substringBefore(Char(0)) // trim the trailing zero characters
+//                .toByteArray()
         }
     }
 
     companion object {
         private const val ALGORITHM = KeyProperties.KEY_ALGORITHM_AES
         private const val BLOCK_MODE = KeyProperties.BLOCK_MODE_CBC
-        private const val PADDING = KeyProperties.ENCRYPTION_PADDING_PKCS7
+
+                private const val PADDING = KeyProperties.ENCRYPTION_PADDING_PKCS7 // uses variable block size
+//        private const val PADDING = KeyProperties.ENCRYPTION_PADDING_NONE // block size must be fixed
+
         private const val TRANSFORMATION = "$ALGORITHM/$BLOCK_MODE/$PADDING"
     }
 
