@@ -52,18 +52,7 @@ class CryptoManager {
     }
 
     fun encrypt(bytes: ByteArray, outputStream: OutputStream): ByteArray {
-        //val startPaddingForAES = byteArrayOf(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
-        //val startPaddingForAES = byteArrayOf(127,127,127,127,127,127,127,127,127,127,127,127,127,127,127,127)
-        //val startPaddingForAES = byteArrayOf(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16)
-        //val startPaddingForAES = encryptCipher.iv
-
-//        var bytesToEncrypt = bytes.copyOf()
-//        if (bytes.size + startPaddingForAES.size < 112) {  // 112 + 16 = 128
-//            val additionalBytes = 112 - (bytes.size + startPaddingForAES.size)
-//            bytesToEncrypt += ByteArray(additionalBytes)
-//        }
-//        val encryptedBytes = encryptCipher.doFinal(startPaddingForAES + bytesToEncrypt)
-
+        // Include the Initialization Vector (IV) at the start of the data to encrypt
         val encryptedBytes = encryptCipher.doFinal(encryptCipher.iv + bytes)
 
         outputStream.use {
@@ -87,35 +76,21 @@ class CryptoManager {
 
             val decipheredByteArray = getDecryptCipherForIv(iv)
                 .doFinal(encryptedBytes)
-//            val decipheredIvLength = 128 - decipheredByteArray.size
 
-
+            // Strip the Initialization Vector (usually first 16 bytes) to get the actual unencrypted data
             decipheredByteArray
                 .toList()
-                .subList(16, decipheredByteArray.size) // skip the IV
+                .subList(ivSize, decipheredByteArray.size) // skip the IV
                 .toByteArray()
-                .decodeToString()
-                .substringBefore(Char(0)) // trim the trailing zero characters
-                .toByteArray()
-
-//            getDecryptCipherForIv(iv)
-//                .doFinal(encryptedBytes)
-//                .toList()
-//                .subList(16, encryptedBytes.size - 1) // skip the IV
-//                .toByteArray()
-//                .decodeToString()
-//                .substringBefore(Char(0)) // trim the trailing zero characters
-//                .toByteArray()
+                //.decodeToString()  // for debugging
+                //.toByteArray()     // for debugging
         }
     }
 
     companion object {
         private const val ALGORITHM = KeyProperties.KEY_ALGORITHM_AES
         private const val BLOCK_MODE = KeyProperties.BLOCK_MODE_CBC
-
-                private const val PADDING = KeyProperties.ENCRYPTION_PADDING_PKCS7 // uses variable block size
-//        private const val PADDING = KeyProperties.ENCRYPTION_PADDING_NONE // block size must be fixed
-
+        private const val PADDING = KeyProperties.ENCRYPTION_PADDING_PKCS7 // uses variable block size
         private const val TRANSFORMATION = "$ALGORITHM/$BLOCK_MODE/$PADDING"
     }
 

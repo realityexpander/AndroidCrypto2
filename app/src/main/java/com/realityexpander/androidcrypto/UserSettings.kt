@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UserSettings(
-    val username: String? = "",
-    val password: String? = ""
+    val username: String? = null,
+    val password: String? = null
 )
