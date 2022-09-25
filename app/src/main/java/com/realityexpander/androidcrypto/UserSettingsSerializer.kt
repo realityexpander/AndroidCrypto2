@@ -1,11 +1,9 @@
-package com.plcoding.androidcrypto
+package com.realityexpander.androidcrypto
 
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.datastore.core.Serializer
 import kotlinx.serialization.SerializationException
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.io.OutputStream
@@ -20,6 +18,7 @@ class UserSettingsSerializer(
 
     override suspend fun readFrom(input: InputStream): UserSettings {
         val decryptedBytes = cryptoManager.decrypt(input)
+
         return try {
             Json.decodeFromString(
                 deserializer = UserSettings.serializer(),

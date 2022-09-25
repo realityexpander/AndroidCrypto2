@@ -1,4 +1,4 @@
-package com.plcoding.androidcrypto
+package com.realityexpander.androidcrypto
 
 import kotlinx.serialization.Serializable
 

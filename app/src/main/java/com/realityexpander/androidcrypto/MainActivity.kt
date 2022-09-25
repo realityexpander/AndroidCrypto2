@@ -1,4 +1,4 @@
-package com.plcoding.androidcrypto
+package com.realityexpander.androidcrypto
 
 import android.content.Context
 import android.os.Build
@@ -10,15 +10,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.datastore.dataStore
-import com.plcoding.androidcrypto.ui.theme.AndroidCryptoTheme
+import com.realityexpander.androidcrypto.ui.theme.AndroidCryptoTheme
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
 
 @RequiresApi(Build.VERSION_CODES.M)
 class MainActivity : ComponentActivity() {

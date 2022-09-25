@@ -1,4 +1,4 @@
-package com.plcoding.androidcrypto.ui.theme
+package com.realityexpander.androidcrypto.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
