@@ -12,6 +12,20 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
 
+// Source video
+// https://www.youtube.com/watch?v=D_q07P1sfcc
+
+// Stack overflow issues
+// https://stackoverflow.com/questions/17234359/javax-crypto-illegalblocksizeexception-input-length-must-be-multiple-of-16-whe
+// https://stackoverflow.com/questions/57590740/problem-with-decryption-cipher-in-android-aes-ctr-nopadding
+// https://stackoverflow.com/questions/14371709/android-crittografy-cipher-decrypt-doesnt-work
+// https://security.stackexchange.com/questions/29993/aes-cbc-padding-when-the-message-length-is-a-multiple-of-the-block-size
+// https://stackoverflow.com/questions/33557244/aes-decryption-not-working-for-more-than-16-bytes
+// https://stackoverflow.com/questions/26950251/android-cipher-doesnt-decrypt-first-16-bytes-characters-of-encrypted-data
+// https://developer.android.com/topic/security/data
+//
+
+
 @RequiresApi(Build.VERSION_CODES.M)
 class CryptoManager {
 
